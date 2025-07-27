@@ -1,4 +1,6 @@
 ﻿using LibrarySystem.Core.Interfaces;
+using LibrarySystem_JSBUpskillingTask.Data;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,34 +11,48 @@ namespace LibrarySystem.Infrastructure.Repositories
 {
     public class BaseRepository<T> : IRepository<T> where T : class
     {
-        public T AddAsync(int id, T entity)
+        protected readonly LibraryContext _context;
+
+        public BaseRepository(LibraryContext context)
+        {
+            _context = context;
+        }
+        public void Add(int id, T entity)
+        {
+             _context.Set<T>().Add(entity);
+             _context.SaveChanges();
+        }
+
+        public void Delete(int id)
+        {
+            var entity =  GetById(id);
+            if (entity != null)
+            {
+                _context.Set<T>().Remove(entity);
+                _context.SaveChanges();
+            };
+        }
+
+        public bool Exists(int id)
         {
             throw new NotImplementedException();
         }
 
-        public T DeleteAsync(int id)
+        public IEnumerable<T> GetAll()
         {
-            throw new NotImplementedException();
+            return _context.Set<T>().ToList();
+
         }
 
-        public bool ExistsAsync(int id)
+        public T GetById(int id)
         {
-            throw new NotImplementedException();
+            return  _context.Set<T>().Find(id);
         }
 
-        public IEnumerable<T> GetAllAsync()
+        public void Update(T entity)
         {
-            throw new NotImplementedException();
-        }
-
-        public T GetByIdAsync(int id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public T UpdateAsync(T entity)
-        {
-            throw new NotImplementedException();
+            _context.Entry(entity).State = EntityState.Modified;
+             _context.SaveChanges();
         }
     }
 }
