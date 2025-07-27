@@ -14,6 +14,5 @@ namespace LibrarySystem.Core.Interfaces
         void Add(int id ,T entity);
         void Update(T entity);
         void Delete(int id);
-        bool Exists(int id);
     }
 }

@@ -7,12 +7,9 @@ using System.Threading.Tasks;
 
 namespace LibrarySystem.Core.Interfaces
 {
-    public interface IBookRepository
+    public interface IBookRepository : IRepository<Book>
     {
-        IEnumerable<Book> GetAllBooks();
-        Book GetBookById(int id);
-        Book AddEditBook(int id , Book book);
-        void DeleteBookAsync(int id);
-        bool BookExistsAsync(int id);
+        // Additional methods specific to Book can be added here if needed
+        IEnumerable<Book> GetBooksByCategory(int categoryId);
     }
 }

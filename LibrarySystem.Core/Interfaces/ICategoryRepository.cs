@@ -7,13 +7,8 @@ using System.Threading.Tasks;
 
 namespace LibrarySystem.Core.Interfaces
 {
-    public interface ICategoryRepository
+    public interface ICategoryRepository : IRepository<Category>
     {
-        Task<IEnumerable<Book>> GetAllBooksAsync();
-        Task<Book> GetBookByIdAsync(int id);
-        Task AddBookAsync(Book book);
-        Task UpdateBookAsync(Book book);
-        Task DeleteBookAsync(int id);
-        Task<bool> BookExistsAsync(int id);
+        // Additional methods specific to Category can be added here if needed
     }
 }

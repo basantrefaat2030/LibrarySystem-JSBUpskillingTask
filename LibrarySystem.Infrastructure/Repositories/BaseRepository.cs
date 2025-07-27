@@ -32,12 +32,6 @@ namespace LibrarySystem.Infrastructure.Repositories
                 _context.SaveChanges();
             };
         }
-
-        public bool Exists(int id)
-        {
-            throw new NotImplementedException();
-        }
-
         public IEnumerable<T> GetAll()
         {
             return _context.Set<T>().ToList();
