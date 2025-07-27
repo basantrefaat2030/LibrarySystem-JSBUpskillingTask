@@ -1,0 +1,6 @@
+@LibrarySystem_JSBUpskillingTask_HostAddress = http://localhost:5127
+
+GET {{LibrarySystem_JSBUpskillingTask_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
