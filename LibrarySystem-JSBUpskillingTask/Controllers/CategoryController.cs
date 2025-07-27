@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using LibrarySystem.Core.Interfaces;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LibrarySystem_JSBUpskillingTask.Controllers
@@ -7,5 +8,10 @@ namespace LibrarySystem_JSBUpskillingTask.Controllers
     [ApiController]
     public class CategoryController : ControllerBase
     {
+        private readonly IBookRepository _bookRepository;
+        public CategoryController(IBookRepository bookRepository)
+        {
+            _bookRepository = bookRepository;
+        }
     }
 }

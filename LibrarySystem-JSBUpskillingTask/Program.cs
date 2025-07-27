@@ -1,4 +1,7 @@
 
+using LibrarySystem.Core.Interfaces;
+using LibrarySystem.Infrastructure.Repositories;
+
 namespace LibrarySystem_JSBUpskillingTask
 {
     public class Program
@@ -13,6 +16,9 @@ namespace LibrarySystem_JSBUpskillingTask
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+            //object life time
+            builder.Services.AddScoped<IBookRepository, BookRepository>();
+            builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 
             var app = builder.Build();
 
