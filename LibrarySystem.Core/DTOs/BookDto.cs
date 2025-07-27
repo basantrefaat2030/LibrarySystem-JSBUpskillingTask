@@ -24,6 +24,6 @@ namespace LibrarySystem.Core.DTOs
         [Range(0, int.MaxValue)]
         public int Stock { get; set; }
 
-        public int CategoryId { get; set; }
+        public string CategoryName { get; set; }
     }
 }

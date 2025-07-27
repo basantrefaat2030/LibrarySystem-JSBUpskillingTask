@@ -34,7 +34,7 @@ namespace LibrarySystem.Infrastructure.Repositories
         }
         public IEnumerable<T> GetAll()
         {
-            return _context.Set<T>().ToList();
+            return _context.Set<T>().Include(a => a).ToList();
 
         }
 
