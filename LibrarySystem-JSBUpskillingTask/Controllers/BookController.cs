@@ -41,13 +41,13 @@ namespace LibrarySystem_JSBUpskillingTask.Controllers
             return Ok(Books);
 
         }
-        [HttpGet("id")]
-        public IActionResult GetBookById(int bookId)
+        [HttpGet("{id}")]
+        public IActionResult GetBookById(int id)
         {
-            if (bookId <= 0)
+            if (id <= 0)
                 return BadRequest("Invalid Book ID");
 
-            var book = _bookRepository.GetById(bookId, a => a.Category);
+            var book = _bookRepository.GetById(id, a => a.Category);
             if (book == null)
                 return NotFound("Book not found");
             var bookDto = new BookDto()
@@ -94,31 +94,32 @@ namespace LibrarySystem_JSBUpskillingTask.Controllers
 
         }
 
-        [HttpPut("id")]
-        public IActionResult UpdateBook([FromBody] AddUpdateBookDto bookData)
+        [HttpPut("{id}")]
+        public IActionResult UpdateBook(int id, [FromBody] AddUpdateBookDto bookData)
         {
-            if (bookData.BookId <= 0)
+            if (id <= 0 || bookData.BookId <= 0 || id != bookData.BookId)
                 return BadRequest("Invalid Book ID");
-
-            var book = _bookRepository.GetById(bookData.BookId);
-            if (book == null)
+            var existingBook = _bookRepository.GetById(id);
+            if (existingBook == null)
                 return NotFound("Book not found");
             if (ModelState.IsValid)
             {
-                book.Name = bookData.Name;
-                book.Description = bookData.Description;
-                book.Price = bookData.Price;
-                book.Author = bookData.Author;
-                book.Stock = bookData.Stock;
-                book.CategoryId = bookData.CategoryId;
-                _bookRepository.Update(book);
-                return Ok(book);
+                existingBook.Name = bookData.Name;
+                existingBook.Description = bookData.Description;
+                existingBook.Price = bookData.Price;
+                existingBook.Author = bookData.Author;
+                existingBook.Stock = bookData.Stock;
+                existingBook.CategoryId = bookData.CategoryId;
+                _bookRepository.Update(id ,existingBook);
+                return Ok(existingBook);
             }
-
-            return BadRequest("Invalid data provided for book update.");
+            else
+            {
+                return BadRequest("Invalid data provided for book update.");
+            }
         }
 
-        [HttpDelete("id")]
+        [HttpDelete("{id}")]
 
         public IActionResult DeleteBook(int id)
         {

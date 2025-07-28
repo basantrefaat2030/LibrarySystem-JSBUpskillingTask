@@ -59,7 +59,7 @@ namespace LibrarySystem.Infrastructure.Repositories
 
         }
 
-        public void Update( T entity)
+        public void Update(int id ,T entity)
         {
             _context.Entry(entity).State = EntityState.Modified;
              _context.SaveChanges();

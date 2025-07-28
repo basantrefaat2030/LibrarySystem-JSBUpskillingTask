@@ -33,7 +33,7 @@ namespace LibrarySystem_JSBUpskillingTask.Controllers
             return Ok(categoryDtos);
         }
 
-        [HttpGet("id")]
+        [HttpGet("{id}")]
         public IActionResult GetCategoryById(int id)
         {
             var category = _categoryRepository.GetById(id);
@@ -74,38 +74,37 @@ namespace LibrarySystem_JSBUpskillingTask.Controllers
             }
             return BadRequest("Invalid data provided for category.");
         }
-        [HttpPut]
-        public IActionResult UpdateCategory([FromBody] CategoryDto categoryDto)
+        [HttpPut("{id}")]
+        public IActionResult UpdateCategory(int id , [FromBody] CategoryDto categoryDto)
         {
-            if(categoryDto.CategoryId <= 0)
-                return BadRequest("Invalid CategotyId.");
-
-            var category = _categoryRepository.GetById(categoryDto.CategoryId);
-            if (category == null)
-                return NotFound("Category not found.");
-
-            if (ModelState.IsValid)
-            {
-                category.Name = categoryDto.Name;
-                category.Description = categoryDto.Description;
-                _categoryRepository.Update(category);
-                
-            }
-            return Ok(category);
-        }
-        [HttpDelete("id")]
-        public IActionResult Detetecategory(int categoryId)
-        {
-            if (categoryId <= 0)
+            if (id <= 0 || categoryDto.CategoryId <= 0 || id != categoryDto.CategoryId)
                 return BadRequest("Invalid Category ID.");
 
-            var category = _categoryRepository.GetById(categoryId , a => a.Books);
+            var existingCategory = _categoryRepository.GetById(id);
+            if (existingCategory == null)
+                return NotFound("Category not found.");
+            if (ModelState.IsValid)
+            {
+                existingCategory.Name = categoryDto.Name;
+                existingCategory.Description = categoryDto.Description;
+                _categoryRepository.Update(id, existingCategory);
+                return Ok(existingCategory);
+            }
+            return BadRequest("Invalid data provided for category update.");
+        }
+        [HttpDelete("{id}")]
+        public IActionResult Detetecategory(int id)
+        {
+            if (id <= 0)
+                return BadRequest("Invalid Category ID.");
+
+            var category = _categoryRepository.GetById(id , a => a.Books);
             if (category == null )
                 return NotFound("Category not found.");
             else if (category.Books != null && category.Books.Any())
                 return BadRequest("Category cannot be deleted because it has associated books.");
 
-            _categoryRepository.Delete(categoryId);
+            _categoryRepository.Delete(id);
             return Ok("Category deleted successfully.");
         }
     }

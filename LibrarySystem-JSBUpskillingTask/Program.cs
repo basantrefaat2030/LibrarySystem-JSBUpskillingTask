@@ -22,6 +22,7 @@ namespace LibrarySystem_JSBUpskillingTask
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
             //object life time
+            //here can make unitOfWork to initialize the repositories and register them in the container once
             builder.Services.AddScoped<IBookRepository, BookRepository>();
             builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 
