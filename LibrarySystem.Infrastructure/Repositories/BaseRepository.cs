@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -17,7 +18,7 @@ namespace LibrarySystem.Infrastructure.Repositories
         {
             _context = context;
         }
-        public void Add(int id, T entity)
+        public void Add(T entity)
         {
              _context.Set<T>().Add(entity);
              _context.SaveChanges();
@@ -34,8 +35,15 @@ namespace LibrarySystem.Infrastructure.Repositories
         }
         public IEnumerable<T> GetAll()
         {
-            return _context.Set<T>().Include(a => a).ToList();
+            return _context.Set<T>().ToList();
+        }
 
+
+        public IEnumerable<T> GetAll(params Expression<Func<T, object>>[] includes)
+        {
+            IQueryable<T> query = _context.Set<T>();
+            query = includes.Aggregate(query, (current, include) => current.Include(include));
+            return  query.ToList();
         }
 
         public T GetById(int id)
@@ -43,7 +51,15 @@ namespace LibrarySystem.Infrastructure.Repositories
             return  _context.Set<T>().Find(id);
         }
 
-        public void Update(T entity)
+        public T GetById(int id, params Expression<Func<T, object>>[] includes)
+        {
+            IQueryable<T> query = _context.Set<T>();
+            query = includes.Aggregate(query, (current, include) => current.Include(include));
+            return  query.FirstOrDefault(e => EF.Property<int>(e, "Id") == id);
+
+        }
+
+        public void Update( T entity)
         {
             _context.Entry(entity).State = EntityState.Modified;
              _context.SaveChanges();
